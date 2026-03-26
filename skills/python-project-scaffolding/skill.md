@@ -224,7 +224,8 @@ exclude_lines = [
 Follow SPEC.md **to the letter**. For each item in the spec's Public API:
 
 - Implement it exactly as specced (name, signature, behavior)
-- Add docstrings (one-line summary + Args/Returns/Raises)
+- Add verbose docstrings (comprehensive summary + detailed Args/Returns/Raises/Examples)
+- Every function should have at minimum: summary line, extended description, Args section with types, Returns section with types, Raises section, and Examples section where helpful
 - Handle all edge cases listed in SPEC.md
 - Raise meaningful exceptions with descriptive messages
 - Add type hints to all function signatures
