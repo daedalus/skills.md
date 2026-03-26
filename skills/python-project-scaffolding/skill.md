@@ -586,23 +586,33 @@ name: Publish to PyPI
 on:
   release:
     types: [published]
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install build
-        run: pip install build
-      - name: Build sdist and wheel
-        run: python -m build
-      - uses: actions/upload-artifact@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
+
+      - name: Create virtual environment and install build tools
+        run: uv venv && uv pip install build twine
+
+      - name: Build package
+        run: uv run python -m build
+
+      - name: Check package
+        run: uv run python -m twine check dist/*
+
+      - name: Upload dist artifacts
+        uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
@@ -610,17 +620,23 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
-    environment: pypi
+    environment:
+      name: pypi
+      url: https://pypi.org/p/libtor
     permissions:
       id-token: write
-      contents: read
     steps:
-      - uses: actions/download-artifact@v4.1.8
+      - name: Download dist artifacts
+        uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
+
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_API_TOKEN }}
 ```
 
 ## Step 11.6 — MCP registry Publish
