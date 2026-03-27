@@ -143,6 +143,8 @@ authors = [
     {name = "<author_name>", email = "<author_email>"}
 ]
 dependencies = []
+# Apply ONLY if <is_mcp_server> is true:
+dependencies = ["fastmcp"]
 
 [project.optional-dependencies]
 dev = [
@@ -883,6 +885,46 @@ Ensure `pyproject.toml` has `[project.scripts]` entry:
 ```toml
 [project.scripts]
 <package_name> = "<package_name>.__main__:main"
+```
+
+---
+
+## MCP Server Projects (fastmcp)
+
+**Apply this step ONLY if `<is_mcp_server>` is `true`.**
+
+For MCP server projects, use fastmcp:
+
+```toml
+[project.optional-dependencies]
+mcp = ["fastmcp"]
+```
+
+Implement the MCP server using fastmcp:
+
+```python
+import fastmcp
+
+mcp = fastmcp.FastMCP("<package_name>")
+
+@mcp.tool()
+def your_tool(arg: str) -> str:
+    """Tool description."""
+    ...
+
+@mcp.resource("resource://name")
+def your_resource() -> str:
+    ...
+```
+
+For stdio transport, ensure `__main__.py` runs the server:
+
+```python
+import sys
+from <package_name> import mcp
+
+if __name__ == "__main__":
+    mcp.run()
 ```
 
 ---
