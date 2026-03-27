@@ -539,7 +539,7 @@ jobs:
         uses: codecov/codecov-action@v4
         with:
           files: ./coverage.xml
-          fail_ci_if_error: true
+          fail_ci_if_error: false
 
   lint:
     runs-on: ubuntu-latest
