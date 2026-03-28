@@ -516,6 +516,7 @@ htmlcov/
 .vscode/
 *.swp
 *.swo
+.hypothesis/
 ```
 
 ---
