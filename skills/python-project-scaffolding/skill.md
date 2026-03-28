@@ -248,8 +248,6 @@ convention = "google"
 [tool.mypy]
 python_version = "<target_python>"
 strict = true
-src = ["src"]
-tests = ["tests"]
 warn_return_any = true
 warn_unused_ignores = true
 
