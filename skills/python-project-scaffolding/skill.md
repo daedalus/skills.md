@@ -875,6 +875,7 @@ Before declaring the project done, verify every item:
 - [ ] LICENSE present
 - [ ] pyproject.toml has `readme = "README.md"`
 - [ ] `.gitignore` present
+- [ ] `.github/workflows` directory present
 - [ ] `.pre-commit-config.yaml` present
 - [ ] `.github/workflows/ci.yml` present
 - [ ] `.github/workflows/pypi-publish.yml` present
