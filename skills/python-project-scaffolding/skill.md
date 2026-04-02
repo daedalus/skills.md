@@ -36,7 +36,7 @@ one focused clarifying question only.
 
 ---
 
-### Step — 0.5 Setup project internal variables to use later
+### Step 1 — Setup project internal variables to use later
 
 ```
 <package_name> Is the package name.
@@ -44,19 +44,18 @@ one focused clarifying question only.
 <version> Is the project version (default :"0.1.0").
 <project_description> Is the project description.
 <is_mcp_server> Is this project about MCP server? (true/false)
-<author_name> is the author name (git config user.name).
-<author_email> is the author email (git config.email).
 <github_username> Is the github username (git config user.githubusername).
+<author_name> Is the author name (git config user.name).
+<author_email> Is the author email (git config.email).
 <target_python> Is the target Python version (default: "3.11").
 <ruff_version> Is the ruff version (default: "v0.9.0").
 <mypy_version> Is the mypy version (default: "v1.14.0").
 <pre_commit_version> Is the pre-commit version (default: "v5.0.0").
 <hatch_version> Is the hatch version (default: "latest").
-<scm_version> Is the setuptools-scm version (default: "0.1.1").
 ```
 
 
-### Step 1 — Write SPEC.md First
+### Step 2 — Write SPEC.md First
 
 **Always write SPEC.md before writing any code.** No exceptions.
 
@@ -93,7 +92,7 @@ After writing SPEC.md, **pause and verify it makes sense** before moving on.
 
 ---
 
-### Step 2 — Project Structure
+### Step 3 — Project Structure
 
 Create the following layout:
 
@@ -123,7 +122,7 @@ Create the following layout:
 
 ---
 
-### Step 2.5 — Internal Subsystem Organization
+### Step 4 — Internal Subsystem Organization
 
 When a package grows beyond a few modules, separate concerns into distinct subsystems
 within `src/<package_name>/`. Each subsystem should be a self-contained package with a
@@ -175,7 +174,7 @@ independently.
 
 ---
 
-### Step 3 — pyproject.toml
+### Step 5 — pyproject.toml
 
 **Modern configuration with hatchling + ruff + mypy + coverage:**
 
@@ -196,7 +195,7 @@ authors = [
 ]
 dependencies = []
 # Apply ONLY if <is_mcp_server> is true:
-dependencies = ["fastmcp"]
+# dependencies = ["fastmcp"]
 
 [project.optional-dependencies]
 dev = [
@@ -275,7 +274,7 @@ exclude_lines = [
 
 ---
 
-### Step 4 — Implementation
+### Step 6 — Implementation
 
 Follow SPEC.md **to the letter**. For each item in the spec's Public API:
 
@@ -317,7 +316,7 @@ first, then the code.
 
 ---
 
-### Step 5 — Tests (pytest, heavy coverage)
+### Step 7 — Tests (pytest, heavy coverage)
 
 Write tests **before assuming the implementation is correct**. Tests are the spec made
 executable.
@@ -375,12 +374,10 @@ python -c "import <package_name>; print(<package_name>.__version__)"
 
 ---
 
-### Step 6 — README.md
+### Step 8 — README.md
 
 ```markdown
-# <ProjectName>
-
-> One-line description.
+**<package_name>** — One-line description.
 
 [![PyPI](https://img.shields.io/pypi/v/<package_name>.svg)](https://pypi.org/project/<package_name>/)
 [![Python](https://img.shields.io/pypi/pyversions/<package_name>.svg)](https://pypi.org/project/<package_name>/)
@@ -434,14 +431,14 @@ mypy src/
 ```
 
 **Apply this step ONLY if `<is_mcp_server>` is `true`.**
-```README.md
+
+```markdown
 mcp-name: io.github.<github_username>/<package_name>
 ```
 
-
 ---
 
-### Step 7 — CHANGELOG.md
+### Step 9 — CHANGELOG.md
 
 ```markdown
 # Changelog
@@ -459,7 +456,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-### Step 8 — LICENSE
+### Step 10 — LICENSE
 
 Choose an appropriate license. Default: MIT
 
@@ -489,7 +486,7 @@ SOFTWARE.
 
 ---
 
-### Step 9 — .gitignore
+### Step 11 — .gitignore
 
 ```gitignore
 __pycache__/
@@ -522,7 +519,7 @@ htmlcov/
 
 ---
 
-### Step 10 — Pre-commit Hooks
+### Step 12 — Pre-commit Hooks
 
 **`.pre-commit-config.yaml`:**
 
@@ -554,16 +551,16 @@ Install with: `pip install pre-commit && pre-commit install`
 
 ---
 
-### Step 11 — GitHub Actions CI (`.github/workflows/ci.yml`)
+### Step 13 — GitHub Actions CI
 
 ```yaml
 name: CI
 
 on:
   push:
-    branches: [master]
+      branches: [master]
   pull_request:
-    branches: [master]
+      branches: [master]
 
 jobs:
   test:
@@ -643,7 +640,7 @@ jobs:
 
 ---
 
-### Step 11.5 — PyPI Publish (`.github/workflows/pypi-publish.yml`)
+### Step 14 — PyPI Publish
 
 ```yaml
 name: Publish to PyPI
@@ -687,7 +684,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: pypi
-      url: https://pypi.org/p/libtor
+      url: https://pypi.org/p/<project_name>
     permissions:
       id-token: write
     steps:
@@ -704,7 +701,7 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
 ```
 
-### Step 11.6 — MCP registry Publish
+### Step 15 — MCP Registry Publish
 **Apply this step ONLY if `<is_mcp_server>` is `true`.**
 
 **`server.json`:**
@@ -745,7 +742,7 @@ jobs:
 
 ```
 
-### Step 11.7 — Publish Python MCP Server (`.github/workflows/mcp-publish.yml`)
+### Step 16 — Publish Python MCP Server
 
 **Apply this step ONLY if `<is_mcp_server>` is `true`.**
 
@@ -771,7 +768,7 @@ jobs:
 
       - name: Install MCP Publisher
         run: |
-          curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v1.5.0/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
+          curl -L "https://github.com/modelcontextprotocol/registry/releases/download/v2.0.0/mcp-publisher_linux_amd64.tar.gz" | tar xz mcp-publisher
 
       - name: Publish to MCP Registry
         run: |
@@ -781,7 +778,7 @@ jobs:
 
 ---
 
-### Step 11.8 — Bumpversion Configuration
+### Step 17 — Bumpversion Configuration
 
 **`.bumpversion.cfg`:**
 
@@ -807,7 +804,7 @@ replace = "version": "{new_version}"
 
 ---
 
-### Step 12 — Lint and Type Check
+### Step 18 — Lint and Type Check
 
 Run linters in order and fix every warning.
 
@@ -831,7 +828,7 @@ After fixing, re-run pytest to confirm nothing broke.
 
 ---
 
-### Step 13 — Git Init, Commit, Push
+### Step 19 — Git Init, Commit, Push
 
 ```bash
 cd <project_root>
@@ -850,14 +847,14 @@ git commit -m "feat: initial release v<version>
 
 ```bash
 git remote add origin <url>   # only if user provided a remote
-git push -u origin main
+git push -u origin master
 ```
 
 If no remote URL was given by the user, stop after `git commit` and inform them.
 
 ---
 
-### Step 14 — Verify Dependencies on PyPI
+### Step 20 — Verify Dependencies on PyPI
 
 Before finalizing, verify all dependencies in `pyproject.toml` exist on PyPI:
 
@@ -1012,7 +1009,7 @@ if __name__ == "__main__":
 
 ---
 
-### Step 15 - Quality Gates
+### Step 21 - Quality Gates
 
 
 Before declaring the project done, verify every item:
@@ -1037,6 +1034,7 @@ Before declaring the project done, verify every item:
 - [ ] `.pre-commit-config.yaml` present
 - [ ] `.github/workflows/ci.yml` present
 - [ ] `.github/workflows/pypi-publish.yml` present
+- [ ] `.bumpversion.cfg` present 
 - [ ] `py.typed` marker file present
 - [ ] `git log` shows at least one commit
 - [ ] All dependencies verified on PyPI (Step 14)
@@ -1072,6 +1070,6 @@ get `ModuleNotFoundError`.
 for proper package metadata.
 
 **Version management:** For production projects, consider using `hatch` or
-`setuptools-scm` for automatic version management instead of hardcoding `<scm_version>`.
+`setuptools-scm` for automatic version management.
 
 **Language:** Make sure the code and the main documentation is always in english.
