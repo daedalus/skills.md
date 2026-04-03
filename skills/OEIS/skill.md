@@ -504,3 +504,7 @@ def growth_alpha(f, lo=10, hi=200):
 def oeis_str(f, count=30):
     return ", ".join(str(f(n)) for n in range(1, count + 1))
 ```
+
+## Appendix 2: Various analysis
+
+Analyze how the sequence behaves for a(n) where n is odd, n is even, n is a perfect square, n=2^k, n=(2^k)-1, n=(2^k)+1 and a(prime(n)).
