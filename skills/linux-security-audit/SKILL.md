@@ -693,3 +693,76 @@ For STIG details → see `references/stig-checklist.md`
 | SUID abuse                     | Non-standard SUID binaries                         |
 | Log tampering                  | `/var/log` permissions, remote syslog              |
 | Lateral movement via SSH keys  | All `authorized_keys` files on system              |
+
+---
+
+## Quality Gates
+
+Before completing any audit, verify these gates have been checked. Mark complete = ✅, skipped = ⏭, failed = ❌.
+
+### Gate G0 — Scope Confirmation
+- [ ] System role confirmed (workstation/server/container host)
+- [ ] Internet-facing or internal-only determined
+- [ ] Compliance target identified (if any)
+- [ ] Sensitive data locations noted
+
+### Gate G1 — Identity & Access
+- [ ] No duplicate UID 0 accounts found
+- [ ] All system accounts have nologin/false shells
+- [ ] No NOPASSWD sudo rules for non-root users
+- [ ] SSH root login disabled
+- [ ] PasswordAuthentication set to no (or PAM lockout configured)
+- [ ] No unexpected users in sudo/wheel/docker/lxd groups
+
+### Gate G2 — Network Exposure
+- [ ] All listening services identified and justified
+- [ ] Firewall active with default DROP policy
+- [ ] Unnecessary services disabled or removed
+- [ ] sysctl network hardening applied (rp_filter, syncookies, etc.)
+
+### Gate G3 — File System Integrity
+- [ ] No unexpected SUID binaries (baseline compared)
+- [ ] No world-writable files outside /tmp /var/tmp (with sticky bit)
+- [ ] /etc/shadow permissions 600 or 640
+- [ ] /etc/sudoers permissions 440
+- [ ] All cron jobs reviewed (system + user)
+- [ ] No scripts downloading+executing from untrusted URLs
+
+### Gate G4 — Kernel Hardening
+- [ ] ASLR enabled (randomize_va_space = 2)
+- [ ] dmesg_restrict = 1
+- [ ] kptr_restrict >= 1
+- [ ] suid_dumpable = 0
+- [ ] protected_symlinks = 1
+- [ ] Unnecessary kernel modules blacklisted
+
+### Gate G5 — Logging & Monitoring
+- [ ] Auditd installed and running (or systemd journal persistent)
+- [ ] Failed login attempts logged and reviewable
+- [ ] sudo usage logged
+- [ ] /var/log permissions secure (not world-writable)
+
+### Gate G6 — Package Hygiene
+- [ ] Security updates available have been identified
+- [ ] No packages from untrusted/unauthenticated repos
+- [ ] Unnecessary packages removed
+
+### Gate G7 — Cryptographic
+- [ ] No TLS < 1.2 in any service config
+- [ ] No RSA keys < 2048 bits
+- [ ] No SSH host keys using weak algorithms (md5, sha1)
+- [ ] SSH key-only authentication enforced
+
+---
+
+### Audit Completion Checklist
+
+Before delivering final report:
+
+- [ ] All 8 phases executed (or explicitly skipped with reason)
+- [ ] Each quality gate verified
+- [ ] Critical/High findings documented with evidence + remediation
+- [ ] Positive controls noted (builds trust)
+- [ ] Remediation commands tested in non-production first
+- [ ] Report tailored to audience (technical vs executive)
+- [ ] Follow-up audit scheduled (quarterly for active systems)
