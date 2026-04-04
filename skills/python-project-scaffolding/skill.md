@@ -750,6 +750,7 @@ jobs:
 
 **Apply this step ONLY if `<is_mcp_server>` is `true`.**
 
+**Write `.github/workflows/mcp-publish.yml` with the content below:**
 ```yaml
 name: Publish Python MCP Server
 
@@ -1034,6 +1035,7 @@ Before declaring the project done, verify every item:
 - [ ] `.pre-commit-config.yaml` present
 - [ ] `.github/workflows/ci.yml` present
 - [ ] `.github/workflows/pypi-publish.yml` present
+- [ ] `.github/workflows/mcp-publish.yml` present
 - [ ] `.bumpversion.cfg` present 
 - [ ] `py.typed` marker file present
 - [ ] `git log` shows at least one commit
