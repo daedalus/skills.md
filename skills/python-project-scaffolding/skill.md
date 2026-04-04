@@ -1074,3 +1074,5 @@ for proper package metadata.
 `setuptools-scm` for automatic version management.
 
 **Language:** Make sure the code and the main documentation is always in english.
+
+**README.md** Make sure it's not vague.
