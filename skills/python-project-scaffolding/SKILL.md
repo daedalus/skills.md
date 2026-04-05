@@ -1046,6 +1046,16 @@ Before declaring the project done, verify every item:
 ---
 
 
+## Code Quality
+
+Review for:
+- No duplicated code (DRY principle)
+- Consistent error handling
+- Full type coverage
+- Clear tool/module/class/function descriptions
+
+---
+
 ## Common Pitfalls
 
 **Don't skip SPEC.md.** The temptation to jump to code is always wrong. The spec forces
