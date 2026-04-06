@@ -1058,6 +1058,8 @@ Review for:
 
 ## Common Pitfalls
 
+**Don't make conditional imports** All the imports should be in the header of the module.
+
 **Don't skip SPEC.md.** The temptation to jump to code is always wrong. The spec forces
 clarity about edge cases before they become bugs.
 
