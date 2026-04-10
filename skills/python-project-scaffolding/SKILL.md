@@ -837,7 +837,14 @@ After fixing, re-run pytest to confirm nothing broke.
 
 ```bash
 cd <project_root>
+
+# Create GitHub repository (requires GitHub CLI)
+gh repo create <project_name> --public --source=. --push=false
+
+# Initialize git (if not already done)
 git init
+
+# Commit all files
 git add .
 git commit -m "feat: initial release v<version>
 
@@ -847,7 +854,13 @@ git commit -m "feat: initial release v<version>
 - CI/CD workflow configured
 - Pre-commit hooks configured"
 
+# Add remote (SSH)
 git remote add origin git@github.com:<github_username>/<project_name>.git
+
+# Add remote (HTTPS) - optional alternative
+git remote add origin-https https://github.com/<github_username>/<project_name>.git
+
+# Push to master branch
 git push -u origin master
 ```
 
@@ -1040,7 +1053,7 @@ Before declaring the project done, verify every item:
 - [ ] `py.typed` marker file present
 - [ ] `git log` shows at least one commit
 - [ ] All dependencies verified on PyPI (Step 14)
-- [ ] Step 19 complete: git initialized, at least one commit exists, remote configured and pushed
+- [ ] Step 19 complete: gh repo created, git initialized, at least one commit exists, remote configured (SSH + HTTPS) and pushed
 
 
 ---
