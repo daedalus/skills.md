@@ -705,13 +705,10 @@ jobs:
           password: ${{ secrets.PYPI_API_TOKEN }}
 ```
 
-### Step 15 — MCP Registry Publish
+### Step 15 — Create a Companion SKILL.md and install-skill.py
 
 **Apply this step ONLY if `<is_mcp_server>` is `true`.**
-
-**Run the install skill script or copy the skill to agent directories:**
-
-Copy the skill files to the agent skills directories:
+**Write `scripts/install-skill.py` with the content below:**
 
 ```python
 #!/usr/bin/env python3
@@ -785,6 +782,34 @@ if __name__ == "__main__":
     sys.exit(main())
 ```
 
+**Apply this step ONLY if `<is_mcp_server>` is `true`.**
+**Write `skills/<project_name>/SKILL.md` with the content below:**
+
+```markdown
+name: {PROJECT_NAME}
+description: >
+  {PROJECT_DESCRIPTION}
+  Triggers on specific keywords or phrases related to this project.
+---
+
+# {PROJECT_NAME} Skill
+
+[Description of the skill's purpose and usage]
+
+## Usage
+
+[How to use this skill]
+
+## Examples
+
+- [Example 1]
+- [Example 2]
+
+```
+
+### Step 16 — MCP Registry Publish
+
+**Apply this step ONLY if `<is_mcp_server>` is `true`.**
 **Update `pyproject.toml` with MCP server configuration:**
 
 ```toml
@@ -792,7 +817,7 @@ if __name__ == "__main__":
 mcp = ["fastmcp"]
 ```
 
-Then proceed with Step 16.
+Then proceed with Step 17.
 
 **`server.json`:**
 ```json
@@ -832,10 +857,9 @@ Then proceed with Step 16.
 
 ```
 
-### Step 16 — Publish Python MCP Server
+### Step 17 — Publish Python MCP Server
 
 **Apply this step ONLY if `<is_mcp_server>` is `true`.**
-
 **Write `.github/workflows/mcp-publish.yml` with the content below:**
 ```yaml
 name: Publish Python MCP Server
@@ -869,7 +893,7 @@ jobs:
 
 ---
 
-### Step 17 — Bumpversion Configuration
+### Step 18 — Bumpversion Configuration
 
 **`.bumpversion.cfg`:**
 
@@ -895,7 +919,7 @@ replace = "version": "{new_version}"
 
 ---
 
-### Step 18 — Lint and Type Check
+### Step 19 — Lint and Type Check
 
 Run linters in order and fix every warning.
 
@@ -919,7 +943,7 @@ After fixing, re-run pytest to confirm nothing broke.
 
 ---
 
-### Step 19 — Git Init, Commit, Push
+### Step 20 — Git Init, Commit, Push
 
 ```bash
 cd <project_root>
@@ -954,7 +978,7 @@ If no remote URL was given by the user, stop after `git commit` and inform them.
 
 ---
 
-### Step 20 — Verify Dependencies on PyPI
+### Step 21 — Verify Dependencies on PyPI
 
 Before finalizing, verify all dependencies in `pyproject.toml` exist on PyPI:
 
@@ -1109,7 +1133,7 @@ if __name__ == "__main__":
 
 ---
 
-### Step 21 - Quality Gates
+### Step 22 - Quality Gates
 
 
 Before declaring the project done, verify every item:
@@ -1135,11 +1159,15 @@ Before declaring the project done, verify every item:
 - [ ] `.github/workflows/ci.yml` present
 - [ ] `.github/workflows/pypi-publish.yml` present
 - [ ] `.github/workflows/mcp-publish.yml` present
+- [ ] `scripts/install-skill.py` present (if `<is_mcp_server>` is true)
+- [ ] `skills/<project_name>/SKILL.md` present (if `<is_mcp_server>` is true)
+- [ ] `server.json` present (if `<is_mcp_server>` is true)
+- [ ] `mcp.json` present (if `<is_mcp_server>` is true)
 - [ ] `.bumpversion.cfg` present 
 - [ ] `py.typed` marker file present
 - [ ] `git log` shows at least one commit
-- [ ] All dependencies verified on PyPI (Step 14)
-- [ ] Step 19 complete: gh repo created, git initialized, at least one commit exists, remote configured (SSH + HTTPS) and pushed
+- [ ] All dependencies verified on PyPI (Step 21)
+- [ ] Step 20 complete: gh repo created, git initialized, at least one commit exists, remote configured (SSH + HTTPS) and pushed
 
 
 ---
@@ -1192,56 +1220,4 @@ for proper package metadata.
 
 ---
 
-### Step 22 — Create a Companion SKILL.md
 
-Create the skill file with actual code:
-
-```python
-#!/usr/bin/env python3
-"""Create a companion SKILL.md for the project."""
-
-from pathlib import Path
-
-PROJECT_NAME = "<project_name>"
-PROJECT_DESCRIPTION = "<project_description>"
-SKILL_TEMPLATE = f"""---
-name: {PROJECT_NAME}
-description: >
-  {PROJECT_DESCRIPTION}
-  Triggers on specific keywords or phrases related to this project.
----
-
-# {PROJECT_NAME} Skill
-
-[Description of the skill's purpose and usage]
-
-## Usage
-
-[How to use this skill]
-
-## Examples
-
-- [Example 1]
-- [Example 2]
-"""
-
-def main() -> int:
-    opencode_skills_dir = Path.home() / ".opencode" / "skills" / PROJECT_NAME
-    claude_skills_dir = Path.home() / ".claude" / "skills" / PROJECT_NAME
-    
-    for skills_dir in [opencode_skills_dir, claude_skills_dir]:
-        if skills_dir.exists() or skills_dir.parent.exists():
-            skills_dir.mkdir(parents=True, exist_ok=True)
-            skill_file = skills_dir / "SKILL.md"
-            skill_file.write_text(SKILL_TEMPLATE)
-            print(f"Created {skill_file}")
-    
-    return 0
-
-
-if __name__ == "__main__":
-    import sys
-    sys.exit(main())
-```
-
-Run this script to create `SKILL.md` in both `.opencode/skills/` and `.claude/skills/` directories.
