@@ -362,6 +362,7 @@ executable.
 | Type correctness | Wrong-type args raise TypeError where appropriate |
 | Property-based | Use hypothesis for complex functions |
 | Adversarial tests | ≥2 per non-adversarial test (happy path, edge case, error case, boundary, type correctness, property-based) |
+| Regression | Every bug fix gets a test that would have caught the bug before the fix |
 
 **Adversarial testing guidance:** An adversarial test deliberately tries to break the assumption a non-adversarial test validates. For each non-adversarial test, think "what would make this function fail in a way the happy-path test wouldn't catch" and write two such tests. Examples of adversarial angles:
 - **Corrupted input:** malformed bytes, truncated data, unexpected nulls, non-ASCII in ASCII fields, NaN/Inf in numeric fields
@@ -377,6 +378,13 @@ executable.
 - `test_divide_nan_input_adversarial`
 
 A non-adversarial test without at least two adversarial counterparts is incomplete. Do not skip this.
+
+**Always add regression tests.** When a bug is found and fixed — whether during
+initial development, code review, or later maintenance — write a test that
+reproduces the exact scenario that caused the bug. Name it
+`test_regression_<brief_description>` (e.g. `test_regression_empty_list_crash`).
+This ensures the bug cannot silently return. Regression tests are non-negotiable:
+every fix ships with a test.
 
 **`conftest.py` pattern:**
 
